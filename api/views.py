@@ -14,7 +14,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 
 # Funciones generales para alumno
 @api_view(['GET', 'POST', 'DELETE', 'PUT'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication])
 def alumno_list(request, matricula=None):
     # Métodos de obtención de datos
@@ -62,7 +62,7 @@ def alumno_list(request, matricula=None):
 
 # Vistas generales (cerrar sesión, catálogos)
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication])
 def estado_list(request):
     if request.method == 'GET':
@@ -71,7 +71,7 @@ def estado_list(request):
         return Response(serializer.data)
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication])
 def carrera_list(request):
     if request.method == 'GET':
