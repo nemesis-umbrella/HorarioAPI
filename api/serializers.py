@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import DtAlumno, CtEstado, CtCarrera
+from .models import DtAlumno, CtEstado, CtCarrera, AsistenciaAlum
 
 # Configuración para alumno
 class DtAlumnoSerializerDisplay(serializers.ModelSerializer):
@@ -24,6 +24,15 @@ class DtAlumnoSerializerCreateOrUpdate(serializers.ModelSerializer):
             'apellidos', 
             'id_estado', 
             'clave_carrera',
+        ]
+
+class AsistenciaAlumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AsistenciaAlum
+        fields = [
+            'id_clase_horario',
+            'id_mat_prof',
+            'matricula',
         ]
 
 # Generales (Contiene datos de catálogos)
