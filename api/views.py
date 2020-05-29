@@ -134,7 +134,7 @@ def alumno_asistencia(request):
                         # Verifica que haya llegado puntual
                         fecha_comb = datetime.combine(fecha,hora_ini)
                         diff = relativedelta(fecha_actual, fecha_comb)
-                        if diff.hours < 0 and diff.minutes <= 10:
+                        if diff.hours < 1 and diff.minutes <= 15:
                             puntual = 1
                         else:
                             puntual = 0
