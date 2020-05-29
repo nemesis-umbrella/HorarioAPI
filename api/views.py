@@ -122,7 +122,7 @@ def alumno_asistencia(request):
                 hora_fin = clase_horario.sab_fin
             # Proceso de registro
             if hora_ini != None and hora_fin != None:
-                if hora_ini >= fecha_actual.time() and hora_fin < fecha_actual.time():
+                if  fecha_actual.time() >= hora_ini and  fecha_actual.time() < hora_fin :
                     fecha = fecha_actual.date()
                     try:
                         # Registro de salida
