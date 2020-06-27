@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import DtAlumno, CtEstado, CtCarrera, AsistenciaAlum
+from .models import Alumno, Estado, Carrera
 
 # Configuración para alumno
-class DtAlumnoSerializerDisplay(serializers.ModelSerializer):
+class AlumnoSerializerDisplay(serializers.ModelSerializer):
     estado = serializers.ReadOnlyField()
     carrera = serializers.ReadOnlyField()
     class Meta:
-        model = DtAlumno
+        model = Alumno
         fields = [
             'matricula',
             'nombre',
@@ -15,9 +15,9 @@ class DtAlumnoSerializerDisplay(serializers.ModelSerializer):
             'carrera',
         ]
 
-class DtAlumnoSerializerCreateOrUpdate(serializers.ModelSerializer):
+class AlumnoSerializerCreateOrUpdate(serializers.ModelSerializer):
     class Meta:
-        model = DtAlumno
+        model = Alumno
         fields = [
             'matricula',
             'nombre',
@@ -26,27 +26,18 @@ class DtAlumnoSerializerCreateOrUpdate(serializers.ModelSerializer):
             'clave_carrera',
         ]
 
-class AsistenciaAlumSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AsistenciaAlum
-        fields = [
-            'id_clase_horario',
-            'id_mat_prof',
-            'matricula',
-        ]
-
 # Generales (Contiene datos de catálogos)
-class CtEstadoSerializer(serializers.ModelSerializer):
+class EstadoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CtEstado
+        model = Estado
         fields = [
             'id_estado',
             'descripcion',
         ]
 
-class CtCarreraSerializer(serializers.ModelSerializer):
+class CarreraSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CtCarrera
+        model = Carrera
         fields = [
             'clave_carrera',
             'descripcion',

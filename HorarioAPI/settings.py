@@ -25,7 +25,7 @@ SECRET_KEY = '*)hx_0id94v&u*vom&7l%%9rbkkb4%6gxk1i83s*$d@lg++s86'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -78,11 +78,23 @@ WSGI_APPLICATION = 'HorarioAPI.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'horario',
+        'USER': 'horario_dbo',
+        'PASSWORD': 'Ab123456-fd',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+"""
+DATABASES = {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -108,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es-mx'
 
-TIME_ZONE = 'America/mexico_city'
+TIME_ZONE = 'America/Mexico_City'
 
 USE_I18N = True
 

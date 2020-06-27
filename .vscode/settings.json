@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "${workspaceFolder:HorarioAPI}/db.sqlite3",
+            "driver": "SQLite",
+            "name": "HorarioAPI",
+            "previewLimit": 50
+        }
+    ]
+}
