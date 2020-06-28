@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
-from api.models import Alumno, Estado, Carrera, ClaseHorario, Asistencia
-from .serializers import AlumnoSerializerDisplay, AlumnoSerializerCreateOrUpdate, EstadoSerializer, CarreraSerializer
+from api.models import Alumno, Estado, Carrera, ClaseHorario, Asistencia, AlumnoHorario, Profesor
+from .serializers import AlumnoSerializerDisplay, AlumnoSerializerCreateOrUpdate, EstadoSerializer, CarreraSerializer, AsistenciaAlumSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.core.exceptions import ObjectDoesNotExist
@@ -67,31 +67,31 @@ def alumno_list(request, matricula=None):
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication])
 def alumno_asistencia(request):
-    pass
-    """ if request.method == 'POST':
+    if request.method == 'POST':
         serializer = AsistenciaAlumSerializer(data=request.data)
         if serializer.is_valid():
-            # Valida que exista la clase horario
+            # Valida si existe el profesor
             try:
-                clase_horario = ClaseHorario.objects.get(id_clase_horario=serializer.data.get("id_clase_horario"),id_mat_prof=serializer.data.get("id_mat_prof"))
+                profesor = Profesor.objects.get(clave_empleado=serializer.data.get('clave_empleado'))
+            except Profesor.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            # Valida si existe la clase horario
+            try:
+                clase_horario = ClaseHorario.objects.get(id_clase_horario=serializer.data.get("id_clase_horario"),profesor=profesor)
             except ClaseHorario.DoesNotExist:
-                #print('No se encontró la clase horario')
                 return Response(status=status.HTTP_404_NOT_FOUND)
             # Valida que exista el alumno
             try:
                 alumno = Alumno.objects.get(matricula=serializer.data.get("matricula"))
             except Alumno.DoesNotExist:
-                #print('No se encontro el alumno')
                 return Response(status=status.HTTP_404_NOT_FOUND)
             # Valida que el alumno esté registrado en la clase
             try:
-                alum_clase_horario = AlumClaseHorario.objects.get(matricula=serializer.data.get("matricula"),id_clase_horario=serializer.data.get("id_clase_horario"))
-            except AlumClaseHorario.DoesNotExist:
-                #print('El alumno no tiene la clase registrada.')
+                alumno_horario = AlumnoHorario.objects.get(alumno=alumno,clase_horario=clase_horario)
+            except AlumnoHorario.DoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND) 
             # Valida que el alumno tenga la clase habilitada
-            if alum_clase_horario.id_estado.id_estado != 1:
-                #print('El alumno no tiene habilitada la clase')
+            if alumno_horario.estado.id_estado != 1:
                 return Response(status=status.HTTP_404_NOT_FOUND)
             # Valida día de la semana
             fecha_actual = datetime.now()
@@ -126,10 +126,10 @@ def alumno_asistencia(request):
                     fecha = fecha_actual.date()
                     try:
                         # Registro de salida
-                        dt_asistencia = Asistencia.objects.get(matricula=alumno,fecha=fecha.isoformat(),id_alum_clas_hor=alum_clase_horario)
-                        if dt_asistencia.hora_salida == None:
-                            dt_asistencia.hora_salida = fecha_actual.time()
-                            dt_asistencia.save()
+                        asistencia = Asistencia.objects.get(alumno_horario=alumno_horario,fecha=fecha.isoformat())
+                        if asistencia.hora_salida == None:
+                            asistencia.hora_salida = fecha_actual.time()
+                            asistencia.save()
                     except Asistencia.DoesNotExist:
                         # Verifica que haya llegado puntual
                         fecha_comb = datetime.combine(fecha,hora_ini)
@@ -139,10 +139,10 @@ def alumno_asistencia(request):
                         else:
                             puntual = 0
                         # Registro de entrada
-                        dt_asistencia = Asistencia(id_alum_clas_hor=alum_clase_horario,matricula=alumno,fecha=fecha.isoformat(),hora_entrada=fecha_actual.time(),puntualidad=puntual)
-                        dt_asistencia.save()
+                        asistencia = Asistencia(alumno_horario=alumno_horario, fecha=fecha.isoformat(),hora_entrada=fecha_actual.time(),puntualidad=puntual)
+                        asistencia.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) """
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Vistas generales (cerrar sesión, catálogos)
 @api_view(['GET'])

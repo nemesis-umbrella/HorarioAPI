@@ -42,3 +42,9 @@ class CarreraSerializer(serializers.ModelSerializer):
             'clave_carrera',
             'descripcion',
         ]
+
+# Contiene los campos para validar
+class AsistenciaAlumSerializer(serializers.Serializer):
+    matricula = serializers.CharField(max_length=11)
+    id_clase_horario = serializers.IntegerField()
+    clave_empleado = serializers.CharField(max_length=11)

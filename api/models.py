@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-# Modelos para procesos internos
+# Definición de las tablas y representación de los datos en clases
 class Materia(models.Model):
     id_materia = models.AutoField(primary_key=True, blank=False, null=False)
     nombre = models.CharField(blank=True, null=True, max_length=50)
@@ -21,6 +21,10 @@ class Carrera(models.Model):
     materias = models.ManyToManyField(Materia, help_text='Seleccione las materias')
 
     def __str__(self):
+        return self.descripcion
+
+    @property
+    def carrera(self):
         return self.descripcion
 
     class Meta:
@@ -66,7 +70,7 @@ class Profesor(models.Model):
     estado = models.ForeignKey(Estado, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return '{0} - {1} {2}'.format(self.clave_empleado,self.nombre,self.apellidos) 
+        return '{0} {1}'.format(self.nombre,self.apellidos) 
 
     class Meta:
         verbose_name = "Maestro"
@@ -92,9 +96,50 @@ class ClaseHorario(models.Model):
     sab_fin = models.TimeField(blank=True, null=True)
     estado = models.ForeignKey(Estado, on_delete=models.CASCADE, null=True)
 
+    @property
+    def lunes(self):
+        if self.lun_ini != None and self.lun_fin != None:
+            return ('{0} - {1}').format(self.lun_ini,self.lun_fin) 
+        else:
+            return '-'
+    
+    @property
+    def martes(self):
+        if self.mar_ini != None and self.mar_fin != None:
+            return ('{0} - {1}').format(self.mar_ini,self.mar_fin)
+        else:
+            return '-'
+
+    @property
+    def miercoles(self):
+        if self.mie_ini != None and self.mie_fin != None:
+            return ('{0} - {1}').format(self.mie_ini,self.mie_fin)
+        else:
+            return '-'
+
+    @property
+    def jueves(self):
+        if self.jue_ini != None and self.jue_fin != None:
+            return ('{0} - {1}').format(self.jue_ini,self.jue_fin)
+        else:
+            return '-'
+
+    @property
+    def viernes(self):
+        if self.vie_ini != None and self.vie_fin != None:
+            return ('{0} - {1}').format(self.vie_ini,self.vie_fin)
+        else:
+            return '-'
+
+    @property
+    def sabado(self):
+        if self.sab_ini != None and self.sab_fin != None:
+            return ('{0} - {1}').format(self.sab_ini,self.sab_fin)
+        else:
+            return '-'
 
     def __str__(self):
-        return self.profesor.nombre + ' '+ self.profesor.apellidos + ' - ' + self.materia.nombre
+        return self.profesor.clave_empleado + ' - ' + self.profesor.nombre + ' '+ self.profesor.apellidos + ' - ' + self.materia.nombre
 
     class Meta:
         verbose_name = "Clase horario"
@@ -105,6 +150,14 @@ class AlumnoHorario(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, null=False)
     clase_horario = models.ForeignKey(ClaseHorario, on_delete=models.CASCADE, null=False)
     estado = models.ForeignKey(Estado, on_delete=models.CASCADE, null=False)
+
+    @property
+    def clase(self):
+        return self.clase_horario.materia
+
+    @property
+    def profesor(self):
+        return self.clase_horario.profesor
 
     def __str__(self):
         return self.alumno.matricula + ' - ' + self.alumno.nombre + ' ' + self.alumno.apellidos + ' - ' + self.clase_horario.materia.nombre
@@ -119,10 +172,31 @@ class Asistencia(models.Model):
     fecha = models.DateField(blank=True, null=False)
     hora_entrada = models.TimeField(blank=True, null=False)
     hora_salida = models.TimeField(blank=True, null=True)
-    puntualidad = models.TextField(blank=True, null=True, max_length=1)
+    puntualidad = models.BooleanField(blank=False, null=False, max_length=1, default=False)
+
+    @property
+    def alumno(self):
+        return self.alumno_horario.alumno
+
+    @property
+    def materia(self):
+        return self.alumno_horario.clase_horario.materia
+
+    def profesor(self):
+        return self.alumno_horario.clase_horario.profesor
 
     def __str__(self):
-        return str(self.no_asistencia)
+        return '{0} - {1} - {2}'.format(self.no_asistencia, self.alumno_horario, self.fecha)
 
     class Meta:
-        ordering = ['no_asistencia']
+        ordering = ['-no_asistencia']
+        unique_together = (('alumno_horario', 'fecha'),)
+
+
+# Modelos para procesos internos (Favor de no tocar, solo en casos necesarios)
+
+class AsistenciaAlum(object):
+    def __init__(self, matricula, id_clase_horario, id_materia, clave_empleado):
+        self.matricula = matricula
+        self.id_clase_horario = id_clase_horario
+        self.clave_empleado = clave_empleado
