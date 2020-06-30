@@ -1,0 +1,15 @@
+.imgRedonda {
+    width:220px;
+    height:220px;
+    border-radius:130px;
+    border:10px solid #666;
+}
+
+.content { 
+    display:block;
+    margin:auto;
+}  
+
+#tabla{
+    margin: auto;
+}

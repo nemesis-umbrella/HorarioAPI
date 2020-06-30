@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es-mx">
+
+<head>
+
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/general.css' %}">
+  <link rel="shortcut icon" type="image/png" href=" {% static 'images/favicon.png' %}" />
+  {% block extrahead %}
+  {% endblock %}
+  <title>{% block title %} Asistencia {% endblock %}</title>
+</head>
+
+<body>
+  {% block header %}
+
+  {% endblock %}
+
+  {% block navbar %}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="{% url 'index' %}">Asistencia</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+      aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+          {% block menuperfil %}
+
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Inicio<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Características</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Historia</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Acerca</a>
+          </li>
+
+          {% endblock %}        
+      </ul>
+        <ul class="navbar-nav my-2 my-lg-0 mr-4">
+          {% if user.is_authenticated  %}
+            <li class="nav-item dropdown active">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                aria-expanded="false">{{user.get_username}}</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'asistencia:perfil' %}">Consultar</a>
+                <a class="dropdown-item" href="{% url 'logout' %}">Salir</a>
+              </div>
+            </li>
+          {% else %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+  </nav>
+  {% endblock %}
+
+  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+  {% block content %}
+  <h5>Este es el contenido del archivo base</h5>
+  {% endblock %}
+  </div>
+
+  {% block footer %}
+  <footer id="footer">
+    <br><br><br>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <p>Made by HunkLao</p>
+        <p>Code released under the <a href="https://github.com/thomaspark/bootswatch/blob/master/LICENSE">MIT
+            License</a>.</p>
+        <p>Based on <a href="https://getbootstrap.com" rel="nofollow">Bootstrap</a>. Icons from <a
+            href="https://fontawesome.com/" rel="nofollow">Font Awesome</a>. Web fonts from <a
+            href="https://fonts.google.com/" rel="nofollow">Google</a>.</p>
+      </div>
+    </div>
+  </footer>
+  {% endblock %}
+</body>
+
+<script src="{% static 'js/jquery-3.4.1.slim.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+</html>

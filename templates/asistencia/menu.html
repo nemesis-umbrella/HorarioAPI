@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% block title %}
+{% if perms.api.es_alumno %}  
+    Alumno
+{% elif perms.api.es_profesor %}
+    Profesor
+{% endif %}
+{% endblock %}
+
+{% block menuperfil %}
+  <li class="nav-item active">
+    <a class="nav-link" href="{% url 'asistencia:perfil' %}">Perfil</a>
+  </li>
+  {% if perms.api.es_alumno %}
+  <li class="nav-item dropdown active">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+      aria-expanded="false">Opciones</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="{% url 'asistencia:horario_list' %}">Mostrar horario</a>
+      <a class="dropdown-item" href="#">Mostrar asistencias</a>
+    </div>
+  </li>
+  {% elif perms.api.es_profesor %}
+  <li class="nav-item dropdown active">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+      aria-expanded="false">Opciones</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">Mostrar clases asignadas</a>
+    </div>
+  </li>
+  {% endif %}
+{% endblock %}

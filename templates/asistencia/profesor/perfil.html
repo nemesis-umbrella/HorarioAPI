@@ -1,0 +1,53 @@
+{% extends 'asistencia/menu.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/imagenperfil.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1 style="text-align: center;">Datos del profesor</h1>
+    {% if profesor %}
+        <img src="{% static 'images/perfil.jpg' %}" class='content imgRedonda' />
+        <table id="tabla" style="border-collapse: separate; border-spacing: 10px 5px;">
+            <tr>
+                <td style="font-weight: bold;">
+                    Clave Empleado:
+                </td>
+                <td>
+                    {{ profesor.clave_empleado }}
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">
+                    Nombre:
+                </td>
+                <td>
+                    {{ profesor.nombre }}
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">
+                    Apellidos:
+                </td>
+                <td>
+                    {{ profesor.apellidos }}
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">
+                    Total de clases:
+                </td>
+                <td>
+                    {% if total_clases %}
+                        {{total_clases}}
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    {% else %}
+        <p>No hay datos disponibles</p>
+    {% endif %}
+{% endblock %}

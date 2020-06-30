@@ -62,6 +62,7 @@ class Alumno(models.Model):
 
     class Meta:
         ordering = ['nombre','apellidos']
+        permissions = [('es_alumno','Es alumno')]
 
 class Profesor(models.Model):
     clave_empleado = models.CharField(primary_key=True, blank=False, null=False, max_length=11)
@@ -75,6 +76,7 @@ class Profesor(models.Model):
     class Meta:
         verbose_name = "Maestro"
         ordering = ['nombre','apellidos']
+        permissions = [('es_profesor','Es profesor')]
 
 # Tablas dependientes
 
@@ -165,6 +167,7 @@ class AlumnoHorario(models.Model):
     class Meta:
         verbose_name = "Alumno Horario"
         ordering = ['id_alum_horario']
+        unique_together = (('alumno', 'clase_horario'),)
 
 class Asistencia(models.Model):
     no_asistencia = models.AutoField(primary_key=True, blank=False, null=False)

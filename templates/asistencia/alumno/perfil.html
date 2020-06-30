@@ -1,0 +1,62 @@
+{% extends 'asistencia/menu.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/imagenperfil.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1 style="text-align: center;">Datos alumno</h1>
+    {% if alumno %}
+
+        <img src="{% static 'images/perfil.jpg' %}" class='content imgRedonda' />
+        <table id="tabla" style="border-collapse: separate; border-spacing: 10px 5px;">
+            <tr>
+                <td style="font-weight: bold;">
+                    Matricula:
+                </td>
+                <td>
+                    {{ alumno.matricula }}
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">
+                    Nombre:
+                </td>
+                <td>
+                    {{ alumno.nombre }}
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">
+                    Apellidos:
+                </td>
+                <td>
+                    {{ alumno.apellidos }}
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">
+                    Carrera:
+                </td>
+                <td>
+                    {{ alumno.carrera }}
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">
+                    Total materias:
+                </td>
+                <td>
+                    {% if total_materias %}
+                        {{total_materias}}
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    {% else %}
+        <p>No hay datos disponibles</p>
+    {% endif %}
+{% endblock %}
