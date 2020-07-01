@@ -1,0 +1,85 @@
+{% extends 'asistencia/menu.html' %}
+{% load static %}
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/personalizado.css' %}">
+{% endblock %}
+{% block title %}
+    Alumno - Horario
+{% endblock %}
+{% block content %}
+    <h1 style="text-align: center;">Asistencia</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{% url 'asistencia:asistencia_list' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group centrar">
+                    <label for="asistenciaselect">Selecciona materia</label>
+                    <select class="form-control" id="asistenciaselect" name="asistenciaselect" onchange="this.form.submit()">
+                      <option value= "" {% if id_horario == None %} selected {% endif %}>Todas las materias</option>
+                      {% if alumno_materias %}
+                      {% for materia in alumno_materias %}
+                        <option value="{{materia.id_alum_horario}}" {% if id_horario == materia.id_alum_horario %} selected {% endif %}>{{materia.clase_horario.materia}}</option>
+                      {% endfor %}
+                      {% endif %}
+                    </select>
+                  </div>
+                </form>
+        </div>
+    </div>
+
+    <hr>
+    
+    <div id="scrolltable" class="centrar">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <td>Fecha</td>
+                    <td>Materia</td>
+                    <td>Profesor</td>
+                    <td>Hora entrada</td>
+                    <td>Hora salida</td>
+                    <td>Puntual</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% if alumno_asistencias %}
+                {% for asistencia in alumno_asistencias %}
+                <tr>
+                    <td>{{ asistencia.fecha }}</td>
+                    <td>{{ asistencia.materia }}</td>
+                    <td>{{ asistencia.profesor }}</td>
+                    <td>{{ asistencia.hora_entrada }}</td>
+                    <td>{{ asistencia.hora_salida }}</td>
+                    <td>
+                        {% if asistencia.puntualidad %}
+                            <img src="{% static 'images/icon-yes.svg' %}" alt="True">
+                        {% else %}
+                            <img src="{% static 'images/icon-no.svg' %}" alt="False">
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                    <h5>No hay registros de clases</h5>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="mx-auto" style="width: 200px">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Anterior</a>
+                    {% endif %}
+                </li>
+                <li class="page-item">
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="page-link">Siguiente</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

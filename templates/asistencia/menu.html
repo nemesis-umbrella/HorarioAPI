@@ -17,7 +17,7 @@
       aria-expanded="false">Opciones</a>
     <div class="dropdown-menu">
       <a class="dropdown-item" href="{% url 'asistencia:horario_list' %}">Mostrar horario</a>
-      <a class="dropdown-item" href="#">Mostrar asistencias</a>
+      <a class="dropdown-item" href="{% url 'asistencia:asistencia_list' %}">Mostrar asistencias</a>
     </div>
   </li>
   {% elif perms.api.es_profesor %}

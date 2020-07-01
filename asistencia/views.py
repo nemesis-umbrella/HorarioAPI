@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from api.models import Alumno, AlumnoHorario, Profesor, ClaseHorario, AlumnoHorario
+from api.models import Alumno, AlumnoHorario, Profesor, ClaseHorario, AlumnoHorario, Asistencia
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission, User
 from django.shortcuts import get_object_or_404
@@ -58,4 +58,31 @@ def listar_horario(request):
     else:
         raise Http404("No existe la consulta")
     
-
+@login_required
+def listar_asistencia(request):
+    if request.method == 'POST' or request.method == 'GET':
+        user_id = request.user.id
+        user = get_object_or_404(User, pk=user_id)
+        if user.has_perm('api.es_alumno'):
+            datos_dict = {}
+            if request.method == 'POST':
+                id_horario = int(request.POST['asistenciaselect']) if request.POST['asistenciaselect'] != "" else None
+            else:
+                id_horario = None
+            # Esta sección es para llenar los datos del combo de selección
+            alumno = get_object_or_404(Alumno,matricula=user.get_username())
+            alumno_horario = AlumnoHorario.objects.filter(alumno=alumno,estado=1)
+            datos_dict['alumno_materias'] = alumno_horario
+            # Datos que corresponden a la tabla
+            if id_horario != None:
+                asistencia = Asistencia.objects.filter(alumno_horario=id_horario)
+            else:
+                asistencia = Asistencia.objects.filter(alumno_horario__in=alumno_horario)
+            datos_dict['alumno_asistencias'] = asistencia
+            datos_dict['id_horario'] = id_horario
+            print(id_horario)
+            return render(request,'asistencia/alumno/asistencia.html', datos_dict)
+        else:
+            raise Http404("No existe la consulta")
+    else:
+        raise Http404("No existe la operación")

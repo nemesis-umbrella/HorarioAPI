@@ -1,9 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es-mx">
-
 <head>
-
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/general.css' %}">
@@ -26,9 +24,8 @@
       <span class="navbar-toggler-icon"></span>
     </button>
       <div class="collapse navbar-collapse" id="navbarColor01">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           {% block menuperfil %}
-
           <li class="nav-item active">
             <a class="nav-link" href="#">Inicio<span class="sr-only">(current)</span></a>
           </li>
@@ -41,7 +38,6 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Acerca</a>
           </li>
-
           {% endblock %}        
       </ul>
         <ul class="navbar-nav my-2 my-lg-0 mr-4">
@@ -64,7 +60,7 @@
   </nav>
   {% endblock %}
 
-  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+  <div class="container-fluid">
   {% block content %}
   <h5>Este es el contenido del archivo base</h5>
   {% endblock %}
