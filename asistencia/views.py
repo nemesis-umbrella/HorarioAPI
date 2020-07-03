@@ -60,15 +60,15 @@ def listar_horario(request):
     
 @login_required
 def listar_asistencia(request):
-    if request.method == 'POST' or request.method == 'GET':
+    if request.method == 'GET':
         user_id = request.user.id
         user = get_object_or_404(User, pk=user_id)
         if user.has_perm('api.es_alumno'):
-            datos_dict = {}
-            if request.method == 'POST':
-                id_horario = int(request.POST['asistenciaselect']) if request.POST['asistenciaselect'] != "" else None
+            if request.GET.get('id_horario'):
+                id_horario = int(request.GET['id_horario'])
             else:
                 id_horario = None
+            datos_dict = {}
             # Esta sección es para llenar los datos del combo de selección
             alumno = get_object_or_404(Alumno,matricula=user.get_username())
             alumno_horario = AlumnoHorario.objects.filter(alumno=alumno,estado=1)
@@ -80,7 +80,6 @@ def listar_asistencia(request):
                 asistencia = Asistencia.objects.filter(alumno_horario__in=alumno_horario)
             datos_dict['alumno_asistencias'] = asistencia
             datos_dict['id_horario'] = id_horario
-            print(id_horario)
             return render(request,'asistencia/alumno/asistencia.html', datos_dict)
         else:
             raise Http404("No existe la consulta")

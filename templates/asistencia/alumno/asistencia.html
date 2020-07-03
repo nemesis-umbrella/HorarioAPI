@@ -11,11 +11,10 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form action="{% url 'asistencia:asistencia_list' %}" method="POST">
-                {% csrf_token %}
+            <form action="{% url 'asistencia:asistencia_list' %}" method="GET">
                 <div class="form-group centrar">
-                    <label for="asistenciaselect">Selecciona materia</label>
-                    <select class="form-control" id="asistenciaselect" name="asistenciaselect" onchange="this.form.submit()">
+                    <label for="id_horario">Selecciona materia</label>
+                    <select class="form-control" id="id_horario" name="id_horario" onchange="this.form.submit()">
                       <option value= "" {% if id_horario == None %} selected {% endif %}>Todas las materias</option>
                       {% if alumno_materias %}
                       {% for materia in alumno_materias %}
