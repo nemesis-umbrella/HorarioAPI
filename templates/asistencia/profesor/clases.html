@@ -1,0 +1,64 @@
+{% extends 'asistencia/menu.html' %}
+{% load static %}
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/personalizado.css' %}">
+{% endblock %}
+{% block title %}
+    Alumno - Horario
+{% endblock %}
+{% block content %}
+    <h1 style="text-align: center;">Horario</h1>
+    <div id="scrolltable" class="centrar">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Materia</td>
+                    <td>Lunes</td>
+                    <td>Martes</td>
+                    <td>Miércoles</td>
+                    <td>Jueves</td>
+                    <td>Viernes</td>
+                    <td>Sábado</td>
+                    <td>Total clas. imp.</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% if clases %}
+                {% for clase in clases %}
+                <tr>
+                    <td>{{clase.no}}</td>
+                    <td>{{ clase.materia }}</td>
+                    <td>{{ clase.profesor }}</td>
+                    <td>{{ clase.lunes }}</td>
+                    <td>{{ clase.martes }}</td>
+                    <td>{{ clase.miercoles }}</td>
+                    <td>{{ clase.jueves }}</td>
+                    <td>{{ clase.viernes }}</td>
+                    <td>{{ clase.sabado }}</td>
+                    <td>{{ clase.estado }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                    <h5>No hay registros de clases</h5>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="mx-auto" style="width: 200px">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Anterior</a>
+                    {% endif %}
+                </li>
+                <li class="page-item">
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="page-link">Siguiente</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

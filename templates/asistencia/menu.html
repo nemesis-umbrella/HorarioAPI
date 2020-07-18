@@ -9,7 +9,11 @@
 
 {% block menuperfil %}
   <li class="nav-item active">
-    <a class="nav-link" href="{% url 'asistencia:perfil' %}">Perfil</a>
+    {% if perms.api.es_alumno %}
+    <a class="nav-link" href="{% url 'asistencia:perfil_alumno' %}">Perfil</a>
+    {% elif perms.api.es_profesor %}
+    <a class="nav-link" href="{% url 'asistencia:perfil_profesor' %}">Perfil</a>
+    {% endif %}
   </li>
   {% if perms.api.es_alumno %}
   <li class="nav-item dropdown active">
@@ -25,7 +29,7 @@
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
       aria-expanded="false">Opciones</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="#">Mostrar clases asignadas</a>
+      <a class="dropdown-item" href="{% url 'asistencia:clases_profesor' %}">Mostrar clases impartidas</a>
     </div>
   </li>
   {% endif %}

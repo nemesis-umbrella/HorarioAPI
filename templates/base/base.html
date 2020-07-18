@@ -46,7 +46,11 @@
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                 aria-expanded="false">{{user.get_username}}</a>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="{% url 'asistencia:perfil' %}">Consultar</a>
+                {% if perms.api.es_alumno %}
+                  <a class="dropdown-item" href="{% url 'asistencia:perfil_alumno' %}">Consultar</a>
+                {% elif perms.api.es_profesor %}
+                  <a class="dropdown-item" href="{% url 'asistencia:perfil_profesor' %}">Consultar</a>
+                {% endif %}
                 <a class="dropdown-item" href="{% url 'logout' %}">Salir</a>
               </div>
             </li>
