@@ -8,7 +8,10 @@
 {% endblock %}
 {% block content %}
     <h1 style="text-align: center;">Asistencia</h1>
-
+    {% if nombre_alumno %}
+    <h2 style="text-align: center;">{{ nombre_alumno }}</h2>
+    {% endif %}
+    {% if es_alumno %}
     <div class="row">
         <div class="col-md-12">
             <form action="{% url 'asistencia:asistencia_list' %}" method="GET">
@@ -23,9 +26,10 @@
                       {% endif %}
                     </select>
                   </div>
-                </form>
+            </form>
         </div>
     </div>
+    {% endif %}
 
     <hr>
     

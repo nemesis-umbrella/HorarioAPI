@@ -8,7 +8,7 @@ from rest_framework import status
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-
+from django.urls import reverse
 # Create your views here.
 
 def index(request):
@@ -59,27 +59,42 @@ def listar_horario(request):
         raise Http404("No existe la consulta")
     
 @login_required
-def listar_asistencia(request):
+def listar_asistencia(request, id_clase = None, id_alum_horario = None):
     if request.method == 'GET':
         user_id = request.user.id
         user = get_object_or_404(User, pk=user_id)
-        if user.has_perm('api.es_alumno'):
-            if request.GET.get('id_horario'):
-                id_horario = int(request.GET['id_horario'])
-            else:
-                id_horario = None
-            datos_dict = {}
-            # Esta sección es para llenar los datos del combo de selección
-            alumno = get_object_or_404(Alumno,matricula=user.get_username())
-            alumno_horario = AlumnoHorario.objects.filter(alumno=alumno,estado=1)
-            datos_dict['alumno_materias'] = alumno_horario
-            # Datos que corresponden a la tabla
-            if id_horario != None:
-                asistencia = Asistencia.objects.filter(alumno_horario=id_horario)
-            else:
+        datos_dict = {}
+        es_alumno = False
+        if user.has_perm('api.es_alumno') or user.has_perm('api.es_profesor'):
+            if user.has_perm('api.es_alumno'):
+                es_alumno = True
+                if request.GET.get('id_horario'):
+                    id_horario = int(request.GET['id_horario'])
+                else:
+                    id_horario = None
+                # Esta sección es para llenar los datos del combo de selección
+                alumno = get_object_or_404(Alumno,matricula=user.get_username())
+                alumno_horario = AlumnoHorario.objects.filter(alumno=alumno,estado=1)
+                datos_dict['alumno_materias'] = alumno_horario
+                # Datos que corresponden a la tabla
+                if id_horario != None:
+                    asistencia = Asistencia.objects.filter(alumno_horario=id_horario)
+                else:
+                    asistencia = Asistencia.objects.filter(alumno_horario__in=alumno_horario)
+                datos_dict['alumno_asistencias'] = asistencia
+                datos_dict['id_horario'] = id_horario
+            elif user.has_perm('api.es_profesor'):
+                profesor = get_object_or_404(Profesor,clave_empleado=user.get_username())
+                clase_horario = get_object_or_404(ClaseHorario,profesor=profesor,id_clase_horario=id_clase)
+                alumno_horario = AlumnoHorario.objects.filter(id_alum_horario=id_alum_horario,clase_horario=clase_horario)
                 asistencia = Asistencia.objects.filter(alumno_horario__in=alumno_horario)
-            datos_dict['alumno_asistencias'] = asistencia
-            datos_dict['id_horario'] = id_horario
+                if alumno_horario:
+                    nombre_alumno = alumno_horario[0].alumno
+                else:
+                    nombre_alumno = None
+                datos_dict['nombre_alumno'] = nombre_alumno
+                datos_dict['alumno_asistencias'] = asistencia
+            datos_dict['es_alumno'] = es_alumno
             return render(request,'asistencia/alumno/asistencia.html', datos_dict)
         else:
             raise Http404("No existe la consulta")
@@ -95,11 +110,13 @@ def listar_clases_profesor(request):
             profesor = get_object_or_404(Profesor,clave_empleado=user.get_username())
             clase_horarios = ClaseHorario.objects.filter(profesor=profesor,estado=1)
             contador = 1
+            clases = []
             for clase_horario in clase_horarios:
                 alumno_horarios = AlumnoHorario.objects.filter(clase_horario=clase_horario)
-                asistencias = Asistencia.objects.filter(alumno_horario__in=alumno_horarios).exclude(fecha__isnull=True).values_list('fecha',flat = True).distinct()
+                asistencias = Asistencia.objects.values('fecha').filter(alumno_horario__in=alumno_horarios).exclude(fecha__isnull=True).order_by('fecha').distinct('fecha')
                 dict_clase = {
                     'no' : contador,
+                    'url_clase' : reverse('asistencia:clase_alumnos', kwargs={'id_clase': clase_horario.id_clase_horario}), 
                     'materia' : clase_horario.materia,
                     'lunes' : clase_horario.lunes,
                     'martes' : clase_horario.martes,
@@ -109,6 +126,38 @@ def listar_clases_profesor(request):
                     'sabado' : clase_horario.sabado,
                     'total_asist': len(asistencias),
                 }
-                print(dict_clase)
+                clases.append(dict_clase)
                 contador += 1
+            return render(request,'asistencia/profesor/clases.html', {'clases' : clases})
+        else:
             raise Http404("No existe la consulta")
+    else:
+        raise Http404("No existe la operación")
+
+@login_required
+def listar_clase_alumnos(request, id_clase=None):
+    if request.method == 'GET':
+        user_id = request.user.id
+        user = get_object_or_404(User, pk=user_id)
+        if user.has_perm('api.es_profesor'):
+            profesor = get_object_or_404(Profesor,clave_empleado=user.get_username())
+            clase_horario = get_object_or_404(ClaseHorario,profesor=profesor,id_clase_horario=id_clase)
+            alumnos = AlumnoHorario.objects.filter(clase_horario=clase_horario)
+            contador = 1
+            list_alumno = []
+            for alumno_horario in alumnos:
+                asistencias = Asistencia.objects.filter(alumno_horario=alumno_horario).count()
+                dict_alumno = {
+                    'no' : contador,
+                    'nombre' : alumno_horario.alumno.apellidos + ' ' + alumno_horario.alumno.nombre,
+                    'matricula' : alumno_horario.alumno.matricula,
+                    'asistencias' : asistencias,
+                    'alumno_url' : reverse('asistencia:asistencia_list_clase', kwargs={'id_clase': id_clase, 'id_alum_horario' : alumno_horario.id_alum_horario}), 
+                }
+                print(dict_alumno['alumno_url'])
+                list_alumno.append(dict_alumno)
+                contador += 1
+            return render(request,'asistencia/profesor/clase_alumnos.html', {'lista' : list_alumno})
+        raise Http404("No existe la consulta")
+    else:
+        raise Http404("No existe la operación")

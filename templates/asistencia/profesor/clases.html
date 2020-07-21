@@ -4,10 +4,10 @@
 <link rel="stylesheet" href="{% static 'css/personalizado.css' %}">
 {% endblock %}
 {% block title %}
-    Alumno - Horario
+    Profesor - Clases
 {% endblock %}
 {% block content %}
-    <h1 style="text-align: center;">Horario</h1>
+    <h1 style="text-align: center;">Clases</h1>
     <div id="scrolltable" class="centrar">
         <table class="table table-hover">
             <thead>
@@ -28,15 +28,14 @@
                 {% for clase in clases %}
                 <tr>
                     <td>{{clase.no}}</td>
-                    <td>{{ clase.materia }}</td>
-                    <td>{{ clase.profesor }}</td>
+                    <td><a href="{{ clase.url_clase }}">{{ clase.materia }}</a></td>
                     <td>{{ clase.lunes }}</td>
                     <td>{{ clase.martes }}</td>
                     <td>{{ clase.miercoles }}</td>
                     <td>{{ clase.jueves }}</td>
                     <td>{{ clase.viernes }}</td>
                     <td>{{ clase.sabado }}</td>
-                    <td>{{ clase.estado }}</td>
+                    <td>{{ clase.total_asist }}</td>
                 </tr>
                 {% endfor %}
                 {% else %}

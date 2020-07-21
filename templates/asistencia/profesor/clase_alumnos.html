@@ -1,0 +1,37 @@
+{% extends 'asistencia/menu.html' %}
+{% load static %}
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/personalizado.css' %}">
+{% endblock %}
+{% block title %}
+    Clase - Alumnos
+{% endblock %}
+{% block content %}
+    <h1 style="text-align: center;">Horario</h1>
+    <div id="scrolltable" class="centrar">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Nombre</td>
+                    <td>Matricula</td>
+                    <td>Total asistencias</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% if lista %}
+                {% for alumno in lista %}
+                <tr>
+                    <td>{{ alumno.no }}</td>
+                    <td><a href="{{alumno.alumno_url}}">{{ alumno.nombre }}</a></td>
+                    <td>{{ alumno.matricula }}</td>
+                    <td>{{ alumno.asistencias }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                    <h5>No hay registros de alumnos</h5>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
