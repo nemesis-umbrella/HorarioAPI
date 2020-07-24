@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Alumno, Estado, Carrera
+from .models import Alumno, Carrera
 
 # Configuración para alumno
 class AlumnoSerializerDisplay(serializers.ModelSerializer):
@@ -22,19 +22,11 @@ class AlumnoSerializerCreateOrUpdate(serializers.ModelSerializer):
             'matricula',
             'nombre',
             'apellidos', 
-            'id_estado', 
+            'estado', 
             'clave_carrera',
         ]
 
 # Generales (Contiene datos de catálogos)
-class EstadoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Estado
-        fields = [
-            'id_estado',
-            'descripcion',
-        ]
-
 class CarreraSerializer(serializers.ModelSerializer):
     class Meta:
         model = Carrera

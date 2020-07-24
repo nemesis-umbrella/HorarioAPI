@@ -37,7 +37,7 @@ def listar_horario(request):
     if user.has_perm('api.es_alumno'):
         clases = []
         alumno = get_object_or_404(Alumno,matricula=user.get_username())
-        alumno_horario = AlumnoHorario.objects.filter(alumno=alumno,estado=1)
+        alumno_horario = AlumnoHorario.objects.filter(alumno=alumno,activo=True)
         contador = 1
         for horario in alumno_horario:
             dict_horario = {
@@ -49,8 +49,7 @@ def listar_horario(request):
                 'miercoles' : horario.clase_horario.miercoles,
                 'jueves' : horario.clase_horario.jueves,
                 'viernes' : horario.clase_horario.viernes,
-                'sabado' : horario.clase_horario.sabado,
-                'estado' : horario.clase_horario.estado
+                'sabado' : horario.clase_horario.sabado
             }
             clases.append(dict_horario)
             contador += 1
@@ -74,7 +73,7 @@ def listar_asistencia(request, id_clase = None, id_alum_horario = None):
                     id_horario = None
                 # Esta sección es para llenar los datos del combo de selección
                 alumno = get_object_or_404(Alumno,matricula=user.get_username())
-                alumno_horario = AlumnoHorario.objects.filter(alumno=alumno,estado=1)
+                alumno_horario = AlumnoHorario.objects.filter(alumno=alumno,activo=True)
                 datos_dict['alumno_materias'] = alumno_horario
                 # Datos que corresponden a la tabla
                 if id_horario != None:
@@ -108,12 +107,11 @@ def listar_clases_profesor(request):
         user = get_object_or_404(User, pk=user_id)
         if user.has_perm('api.es_profesor'):
             profesor = get_object_or_404(Profesor,clave_empleado=user.get_username())
-            clase_horarios = ClaseHorario.objects.filter(profesor=profesor,estado=1)
+            clase_horarios = ClaseHorario.objects.filter(profesor=profesor,activo=True)
             contador = 1
             clases = []
             for clase_horario in clase_horarios:
-                alumno_horarios = AlumnoHorario.objects.filter(clase_horario=clase_horario)
-                asistencias = Asistencia.objects.values('fecha').filter(alumno_horario__in=alumno_horarios).exclude(fecha__isnull=True).order_by('fecha').distinct('fecha')
+                asistencias = Asistencia.objects.values('fecha').filter(clase_horario=clase_horario).exclude(fecha__isnull=True).order_by('fecha').distinct('fecha')
                 dict_clase = {
                     'no' : contador,
                     'url_clase' : reverse('asistencia:clase_alumnos', kwargs={'id_clase': clase_horario.id_clase_horario}), 

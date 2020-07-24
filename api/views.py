@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
-from api.models import Alumno, Estado, Carrera, ClaseHorario, Asistencia, AlumnoHorario, Profesor
-from .serializers import AlumnoSerializerDisplay, AlumnoSerializerCreateOrUpdate, EstadoSerializer, CarreraSerializer, AsistenciaAlumSerializer
+from api.models import Alumno, Carrera, ClaseHorario, Asistencia, AlumnoHorario, Profesor
+from .serializers import AlumnoSerializerDisplay, AlumnoSerializerCreateOrUpdate, CarreraSerializer, AsistenciaAlumSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,6 +19,9 @@ from dateutil.relativedelta import relativedelta
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication])
 def alumno_list(request, matricula=None):
+    """
+    Muestra todos los alumnos en formato JSON (Posiblemente se elimine)
+    """
     # Métodos de obtención de datos
     if request.method in ('PUT','DELETE'):
         try:
@@ -67,6 +70,9 @@ def alumno_list(request, matricula=None):
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication])
 def alumno_asistencia(request):
+    """
+    Registro de asistencia para los alumnos
+    """
     if request.method == 'POST':
         serializer = AsistenciaAlumSerializer(data=request.data)
         if serializer.is_valid():
@@ -91,7 +97,7 @@ def alumno_asistencia(request):
             except AlumnoHorario.DoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND) 
             # Valida que el alumno tenga la clase habilitada
-            if alumno_horario.estado.id_estado != 1:
+            if not alumno_horario.estado:
                 return Response(status=status.HTTP_404_NOT_FOUND)
             # Valida día de la semana
             fecha_actual = datetime.now()
@@ -126,7 +132,7 @@ def alumno_asistencia(request):
                     fecha = fecha_actual.date()
                     try:
                         # Registro de salida
-                        asistencia = Asistencia.objects.get(alumno_horario=alumno_horario,fecha=fecha.isoformat())
+                        asistencia = Asistencia.objects.get(alumno_horario=alumno_horario,clase_horario=alumno_horario,fecha=fecha.isoformat())
                         if asistencia.hora_salida == None:
                             asistencia.hora_salida = fecha_actual.time()
                             asistencia.save()
@@ -148,16 +154,10 @@ def alumno_asistencia(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication])
-def estado_list(request):
-    if request.method == 'GET':
-        estados = Estado.objects.all()        
-        serializer = EstadoSerializer(estados, many=True)
-        return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-@authentication_classes([TokenAuthentication])
 def carrera_list(request):
+    """
+    Lista todas las carreras
+    """
     if request.method == 'GET':
         carreras = Carrera.objects.all()        
         serializer = CarreraSerializer(carreras, many=True)

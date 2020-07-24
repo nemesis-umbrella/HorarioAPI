@@ -44,7 +44,7 @@
           {% if user.is_authenticated  %}
             <li class="nav-item dropdown active">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                aria-expanded="false">{{user.get_username}}</a>
+                aria-expanded="false">Usuario: {{user.first_name}}</a>
               <div class="dropdown-menu">
                 {% if perms.api.es_alumno %}
                   <a class="dropdown-item" href="{% url 'asistencia:perfil_alumno' %}">Consultar</a>

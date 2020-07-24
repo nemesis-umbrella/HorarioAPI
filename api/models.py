@@ -30,35 +30,27 @@ class Carrera(models.Model):
     class Meta:
         ordering = ['descripcion']
 
-
-class Estado(models.Model):
-    id_estado = models.AutoField(primary_key=True, blank=False, null=False)
-    descripcion = models.CharField(blank=True, null=True, max_length=50)
+class Grupo(models.Model):
+    id_grupo = models.CharField(primary_key=True, blank=False, null=False, max_length=5)
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE, null=False, blank=False)
+    activo = models.BooleanField(null=False, blank=False,default=True)
 
     def __str__(self):
-        return self.descripcion
-
-    class Meta:
-        ordering = ['descripcion']
-
+        return '{0} - {1}'.format(self.id_grupo,self.carrera)
 
 class Alumno(models.Model):
     matricula = models.CharField(primary_key=True, blank=False, null=False, max_length=11)  # This field type is a guess.
     nombre = models.CharField(max_length=50, blank=True, null=False)
     apellidos = models.CharField(max_length=100, blank=True, null=False)
-    estado = models.ForeignKey(Estado, on_delete=models.CASCADE, null=True)
+    activo = models.BooleanField(null=False, blank=False,default=True)
     carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE, null=True)
-
-    @property
-    def estado_desc(self):
-        return self.estado.descripcion
 
     @property
     def carrera_desc(self):
         return self.carrera.descripcion
 
     def __str__(self):
-        return str(self.matricula) + ' - ' + self.nombre + ' ' + self.apellidos
+        return str(self.matricula) + ' - ' + self.apellidos + ' ' + self.nombre
 
     class Meta:
         ordering = ['nombre','apellidos']
@@ -68,7 +60,7 @@ class Profesor(models.Model):
     clave_empleado = models.CharField(primary_key=True, blank=False, null=False, max_length=11)
     nombre = models.CharField(blank=True, null=True, max_length=50)
     apellidos = models.CharField(blank=True, null=True, max_length=100)
-    estado = models.ForeignKey(Estado, on_delete=models.CASCADE, null=True)
+    activo = models.BooleanField(null=False, blank=False,default=True)
 
     def __str__(self):
         return '{0} {1}'.format(self.nombre,self.apellidos) 
@@ -84,6 +76,7 @@ class ClaseHorario(models.Model):
     id_clase_horario = models.AutoField(primary_key=True, blank=False, null=False)
     profesor = models.ForeignKey(Profesor, on_delete=models.CASCADE, null=False)
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE, null=False)
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE, null=False)
     lun_ini = models.TimeField(blank=True, null=True)
     lun_fin = models.TimeField(blank=True, null=True)
     mar_ini = models.TimeField(blank=True, null=True)
@@ -96,7 +89,7 @@ class ClaseHorario(models.Model):
     vie_fin = models.TimeField(blank=True, null=True)
     sab_ini = models.TimeField(blank=True, null=True)
     sab_fin = models.TimeField(blank=True, null=True)
-    estado = models.ForeignKey(Estado, on_delete=models.CASCADE, null=True)
+    activo = models.BooleanField(null=False, blank=False,default=True)
 
     @property
     def lunes(self):
@@ -151,7 +144,7 @@ class AlumnoHorario(models.Model):
     id_alum_horario = models.AutoField(primary_key=True, blank=False, null=False)
     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE, null=False)
     clase_horario = models.ForeignKey(ClaseHorario, on_delete=models.CASCADE, null=False)
-    estado = models.ForeignKey(Estado, on_delete=models.CASCADE, null=False)
+    activo = models.BooleanField(null=False, blank=False,default=True)
 
     @property
     def clase(self):
@@ -166,14 +159,15 @@ class AlumnoHorario(models.Model):
 
     class Meta:
         verbose_name = "Alumno Horario"
-        ordering = ['id_alum_horario']
+        ordering = ['clase_horario','alumno']
         unique_together = (('alumno', 'clase_horario'),)
 
 class Asistencia(models.Model):
     no_asistencia = models.AutoField(primary_key=True, blank=False, null=False)
     alumno_horario = models.ForeignKey(AlumnoHorario, on_delete=models.CASCADE, null=False)
+    clase_horario = models.ForeignKey(ClaseHorario, on_delete=models.CASCADE, null=False)
     fecha = models.DateField(blank=True, null=False)
-    hora_entrada = models.TimeField(blank=True, null=False)
+    hora_entrada = models.TimeField(blank=True, null=True)
     hora_salida = models.TimeField(blank=True, null=True)
     puntualidad = models.BooleanField(blank=False, null=False, max_length=1, default=False)
 
