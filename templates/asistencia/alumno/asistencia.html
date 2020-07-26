@@ -32,6 +32,27 @@
     {% endif %}
 
     <hr>
+
+    <p>
+        <table style="margin: 0 auto; border-collapse: separate; border-spacing: 15px 5px;">
+            <th>
+                <td style="column-span: 3; font-weight: bold;">
+                    Significados
+                </td>
+            </th>
+            <tr>
+                <td>
+                    <img src="{% static 'images/icon-yes.svg' %}" alt="OK"> Asistencia - Puntual
+                </td>
+                <td>
+                    <img src="{% static 'images/reloj.png' %}" width="13" height="13" alt="No"> Asistencia - impuntual &Tab;
+                </td>
+                <td>
+                    <img src="{% static 'images/icon-no.svg' %}" alt="No"> Sin asistencia &Tab;
+                </td>
+            </tr>
+        </table>
+    </p>
     
     <div id="scrolltable" class="centrar">
         <table class="table table-hover">
@@ -52,13 +73,15 @@
                     <td>{{ asistencia.fecha }}</td>
                     <td>{{ asistencia.materia }}</td>
                     <td>{{ asistencia.profesor }}</td>
-                    <td>{{ asistencia.hora_entrada }}</td>
-                    <td>{{ asistencia.hora_salida }}</td>
+                    <td>{{ asistencia.hora_entrada_text }}</td>
+                    <td>{{ asistencia.hora_salida_text }}</td>
                     <td>
-                        {% if asistencia.puntualidad %}
-                            <img src="{% static 'images/icon-yes.svg' %}" alt="True">
+                        {% if asistencia.puntualidad == 1 %}
+                            <img src="{% static 'images/icon-yes.svg' %}" alt="OK">
+                        {% elif asistencia.puntualidad == 2 %}
+                            <img src="{% static 'images/reloj.png' %}" width="13" height="13" alt="No">
                         {% else %}
-                            <img src="{% static 'images/icon-no.svg' %}" alt="False">
+                            <img src="{% static 'images/icon-no.svg' %}" alt="No">
                         {% endif %}
                     </td>
                 </tr>

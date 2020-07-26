@@ -1,6 +1,6 @@
-# Título del Proyecto
+# Horario - API
 
-_Acá va un párrafo que describa lo que es el proyecto_
+_Sistema para el procesamiento de asistencias de los alumnos, incluye sitio web para administrar y visualizar las asistencias, así como una API para su implementación en otra plataforma._
 
 ## Comenzando 🚀
 
@@ -13,9 +13,39 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 
 _Que cosas necesitas para instalar el software y como instalarlas_
 
-```
-Da un ejemplo
-```
+* Python 3.6.9 o superior, se puede descargar de [aquí](https://www.python.org/)
+* [Django](https://www.djangoproject.com/) versión 3.0.8
+    
+    Linux:
+    ```
+    pip3 install Django==3.0.8
+    ```
+
+    Windows:
+    ```
+    pip install Django==3.0.8
+    ```
+* Django REST framework ([djangorestframework](https://www.django-rest-framework.org/))
+
+    Linux:
+    ```
+    pip3 install djangorestframework
+    ```
+
+    Windows:
+    ```
+    pip install djangorestframework
+    ```
+* Django crontab ([django-crontab](https://pypi.org/project/django-crontab/))
+    
+    Linux:
+    ```
+        pip3 install django-crontab
+    ```
+    Windows:
+    ```
+        pip install django-crontab
+    ```
 
 ### Instalación 🔧
 
@@ -27,10 +57,17 @@ _Dí cómo será ese paso_
 Da un ejemplo
 ```
 
-_Y repite_
+_Configuración de procesos en segundo plano_
 
 ```
-hasta finalizar
+Desde la terminal ejecutar la siguiente sentencia, para dar de alta los jobs
+
+    python3 manage.py crontab add
+    
+Una vez hecho esto se comprueba utilizando la siguiente sentencia
+
+    python3 manage.py crontab show
+    
 ```
 
 _Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo_
@@ -62,10 +99,8 @@ _Agrega notas adicionales sobre como hacer deploy_
 ## Construido con 🛠️
 
 _Menciona las herramientas que utilizaste para crear tu proyecto_
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - El framework web usado
-* [Maven](https://maven.apache.org/) - Manejador de dependencias
-* [ROME](https://rometools.github.io/rome/) - Usado para generar RSS
+* [Visual Studio Code](https://code.visualstudio.com/) - Un poderoso editor de texto, casi como un IDE
+* [Django](https://www.djangoproject.com/) - El framework web usado
 
 ## Contribuyendo 🖇️
 
@@ -83,14 +118,14 @@ Usamos [SemVer](http://semver.org/) para el versionado. Para todas las versiones
 
 _Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
 
-* **Andrés Villanueva** - *Trabajo Inicial* - [villanuevand](https://github.com/villanuevand)
-* **Fulanito Detal** - *Documentación* - [fulanitodetal](#fulanito-de-tal)
+* **Jorge L. Mondragón** - *Trabajo Inicial* - [nemesis-umbrella](https://github.com/nemesis-umbrella)
+* **Álvaro Velasco** - *Documentación* - [fulanitodetal](#fulanito-de-tal)
 
 También puedes mirar la lista de todos los [contribuyentes](https://github.com/your/project/contributors) quíenes han participado en este proyecto. 
 
 ## Licencia 📄
 
-Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo [LICENSE.md](LICENSE.md) para detalles
+Este proyecto está bajo la Licencia (MIT) - mira el archivo [LICENSE](LICENSE) para detalles
 
 ## Expresiones de Gratitud 🎁
 
@@ -102,4 +137,4 @@ Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo [LICENSE.md
 
 
 ---
-⌨️ con ❤️ por [Villanuevand](https://github.com/Villanuevand) 😊
+⌨️ con ❤️ por [nemesis-umbrella](https://github.com/nemesis-umbrella) 👾

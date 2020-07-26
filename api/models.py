@@ -169,7 +169,7 @@ class Asistencia(models.Model):
     fecha = models.DateField(blank=True, null=False)
     hora_entrada = models.TimeField(blank=True, null=True)
     hora_salida = models.TimeField(blank=True, null=True)
-    puntualidad = models.BooleanField(blank=False, null=False, max_length=1, default=False)
+    puntualidad = models.IntegerField(blank=False, null=False, default=0)
 
     @property
     def alumno(self):
@@ -179,8 +179,23 @@ class Asistencia(models.Model):
     def materia(self):
         return self.alumno_horario.clase_horario.materia
 
+    @property
     def profesor(self):
         return self.alumno_horario.clase_horario.profesor
+
+    @property
+    def hora_entrada_text(self):
+        if self.hora_entrada != None:
+            return self.hora_entrada
+        else:
+            return '-'
+    
+    @property
+    def hora_salida_text(self):
+        if self.hora_salida != None:
+            return self.hora_salida
+        else:
+            return '-'
 
     def __str__(self):
         return '{0} - {1} - {2}'.format(self.no_asistencia, self.alumno_horario, self.fecha)

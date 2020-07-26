@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'api',
     'asistencia',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -153,3 +154,9 @@ EMAIL_HOST_USER = 'example@gmail.com'
 EMAIL_HOST_PASSWORD = 'password'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'Umbrella Team <noreply@example.com>'
+
+# Procesos en segundo plano que se van a correr (uso de django-crontab)
+LOGFILES_DIR = os.path.join(BASE_DIR, 'logs')
+CRONJOBS = [
+    ('0 23 * * *', 'asistencia.cron.cerrar_asistencias', '>> '+ LOGFILES_DIR +'/cerrar_asistencias_log.log')
+]

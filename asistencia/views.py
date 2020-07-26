@@ -144,7 +144,7 @@ def listar_clase_alumnos(request, id_clase=None):
             contador = 1
             list_alumno = []
             for alumno_horario in alumnos:
-                asistencias = Asistencia.objects.filter(alumno_horario=alumno_horario).count()
+                asistencias = Asistencia.objects.filter(alumno_horario=alumno_horario).exclude(puntualidad=0).count()
                 dict_alumno = {
                     'no' : contador,
                     'nombre' : alumno_horario.alumno.apellidos + ' ' + alumno_horario.alumno.nombre,
