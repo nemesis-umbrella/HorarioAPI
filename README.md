@@ -1,6 +1,6 @@
 # Horario - API
 
-_Sistema para el procesamiento de asistencias de los alumnos, incluye sitio web para administrar y visualizar las asistencias, así como una API para su implementación en otra plataforma._
+_Sistema para tomar asistencias de los alumnos, incluye sitio web para administrar y visualizar las asistencias, así como una API para su implementación en otra plataforma._
 
 ## Comenzando 🚀
 
@@ -14,6 +14,7 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 _Que cosas necesitas para instalar el software y como instalarlas_
 
 * Python 3.6.9 o superior, se puede descargar de [aquí](https://www.python.org/)
+* [PostgreSQL](https://www.postgresql.org/) 10.12 o superior (Opcional) *
 * [Django](https://www.djangoproject.com/) versión 3.0.8
     
     Linux:
@@ -36,6 +37,17 @@ _Que cosas necesitas para instalar el software y como instalarlas_
     ```
     pip install djangorestframework
     ```
+* [Psycopg](https://www.psycopg.org/) - PostgreSQL driver for Python (Opcional) *
+  
+  Linux:
+  ```
+  pip3 install psycopg2
+  ```
+  
+  Windows:
+  ```
+  pip install psycopg2
+  ```
 * Django crontab ([django-crontab](https://pypi.org/project/django-crontab/))
     
     Linux:
@@ -46,18 +58,27 @@ _Que cosas necesitas para instalar el software y como instalarlas_
     ```
         pip install django-crontab
     ```
-
+(*) Solo en caso de querer utilizar otro gestor de base de datos, o en su defecto la versión local del proyecto.
 ### Instalación 🔧
 
-_Una serie de ejemplos paso a paso que te dice lo que debes ejecutar para tener un entorno de desarrollo ejecutandose_
+_A continuación se explica como debes instalar el proyecto para tener un entorno de desarrollo y poder utilizarlo._
 
-_Dí cómo será ese paso_
+_En caso de no utilizar PostgreSQL y el backup localizado en el proyecto, deben realizarse los siguientes pasos. Previo necesario configurar los drives correspondientes en el archivo settings del proyecto ([información aqui](https://docs.djangoproject.com/en/3.0/ref/databases/))._
+
+Migración de los modelos del proyecto a la base de datos (Solo en caso de no utilizar el backup). 
 
 ```
-Da un ejemplo
-```
+Desde la terminal, en la ruta del proyecto ejecutar la siguiente línea.
 
-_Configuración de procesos en segundo plano_
+python3 manage.py migrate
+```
+Creación de superusuario, para administrar el sitio
+```
+python3 manage.py createsuperuser
+```
+ **Nota:** En caso de decidir empezar con un proyecto en blanco, es necesario que se creen los datos de forma manual para cada uno de los modelos. 
+
+_Configuración de procesos en segundo plano (necesarios para realizar el cierre de las asistencias)_
 
 ```
 Desde la terminal ejecutar la siguiente sentencia, para dar de alta los jobs
@@ -99,8 +120,10 @@ _Agrega notas adicionales sobre como hacer deploy_
 ## Construido con 🛠️
 
 _Menciona las herramientas que utilizaste para crear tu proyecto_
-* [Visual Studio Code](https://code.visualstudio.com/) - Un poderoso editor de texto, casi como un IDE
-* [Django](https://www.djangoproject.com/) - El framework web usado
+* [Visual Studio Code](https://code.visualstudio.com/) - Edición de código. Redefinido.
+* [Django](https://www.djangoproject.com/) - El marco web para perfeccionistas con plazos.
+
+* [pgAdmin](https://www.pgadmin.org/download/) - La plataforma de administración y desarrollo de código abierto más popular y rica en características para PostgreSQL.
 
 ## Contribuyendo 🖇️
 
@@ -119,7 +142,7 @@ Usamos [SemVer](http://semver.org/) para el versionado. Para todas las versiones
 _Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
 
 * **Jorge L. Mondragón** - *Trabajo Inicial* - [nemesis-umbrella](https://github.com/nemesis-umbrella)
-* **Álvaro Velasco** - *Documentación* - [fulanitodetal](#fulanito-de-tal)
+* **Álvaro Velasco** - *Documentación* - [AlvaroIVC](https://github.com/AlvaroIVC)
 
 También puedes mirar la lista de todos los [contribuyentes](https://github.com/your/project/contributors) quíenes han participado en este proyecto. 
 
@@ -137,4 +160,4 @@ Este proyecto está bajo la Licencia (MIT) - mira el archivo [LICENSE](LICENSE) 
 
 
 ---
-⌨️ con ❤️ por [nemesis-umbrella](https://github.com/nemesis-umbrella) 👾
+⌨️ con ❤️ por [Jorge L. Mondragón](https://github.com/nemesis-umbrella) 👾
