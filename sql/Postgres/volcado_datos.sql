@@ -32,7 +32,7 @@ INSERT INTO api_profesor VALUES(6789512,'Jill', 'Valentine',1);
 INSERT INTO api_profesor VALUES(8964481,'Chris', 'Redfield',1);
 INSERT INTO api_profesor VALUES(5964412,'Albert', 'Wesker',1);
 INSERT INTO api_profesor VALUES(1291564,'Claudia', 'Morán',1);
-INSERT INTO api_profesor VALUES(2015544,'José Luis', 'Limón',1);
+INSERT INTO api_profesor VALUES(2015544,'José', 'Limón',1);
 
 --
 -- Volcado de datos para la tabla 'api_alumno'
@@ -40,5 +40,5 @@ INSERT INTO api_profesor VALUES(2015544,'José Luis', 'Limón',1);
 INSERT INTO api_alumno VALUES (201450484,'Jorge L.', 'Mondragón','INFO',1);
 INSERT INTO api_alumno VALUES (201459920,'Daniel', 'Peréz','SIST',1);
 INSERT INTO api_alumno VALUES (201455699,'Alexa', 'Reyes','BQUIM',1);
-INSERT INTO api_alumno VALUES (201446462,'Nancy', 'Zavala','GESTE',1);
-INSERT INTO api_alumno VALUES (201445897,'Juan', 'Sanchéz','AERO',1);
+INSERT INTO api_alumno VALUES (201446462,'Nancy', 'Zepeda','GESTE',1);
+INSERT INTO api_alumno VALUES (201445897,'Juan', 'Sanachez','AERO',1);
